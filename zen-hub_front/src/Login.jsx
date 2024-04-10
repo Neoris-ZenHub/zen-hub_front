@@ -7,32 +7,21 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import NeorisIconLight from './images/NeorisLogoLight.png';
 import './App.css';
 import { Login_Function } from './Functions/Login_Functions.js';
-
-
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#1B242A', 
-    },
-    secondary: {
-      main: '#F3F2F2', 
-    },
-  },
-});
-
+import { theme } from './theme.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
      //Verificar que ningun campo este vació
@@ -41,8 +30,14 @@ export default function Login() {
       return;
     }
 
-    Login_Function(email, password);
-    };
+    try{
+      await Login_Function(email, password);
+      navigate('/homepage');
+    } catch (error) {
+      setErrorMessage("Error al iniciar sesión:" + error.message);
+      return;
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -73,9 +68,9 @@ export default function Login() {
               onChange = {e => setEmail(e.target.value)}
               InputLabelProps={{
                 sx: {
-                  color: '#F3F2F2',
+                  color: '#FFFFFF',
                   '&.Mui-focused': {
-                    color: '#F3F2F2',
+                    color: '#FFFFFF',
                   },
                 },
               }}
@@ -92,9 +87,9 @@ export default function Login() {
               onChange = {e => setPassword(e.target.value)}
               InputLabelProps={{
                 sx: {
-                  color: '#F3F2F2',
+                  color: '#FFFFFF',
                   '&.Mui-focused': {
-                    color: '#F3F2F2',
+                    color: '#FFFFFF',
                   },
                 },
               }}
@@ -103,13 +98,13 @@ export default function Login() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, color: '#F3F2F2', backgroundColor: '#1B242A', }}
+              sx={{ mt: 3, mb: 2, color: '#FFFFFF', backgroundColor: '#1B242A', }}
             >
               Sign In
             </Button>
             <Grid container>
               <Grid item>
-                <Link href ="/signup" variant="body2" sx ={{color: '#F3F2F2'}}>
+                <Link href ="/signup" variant="body2" sx ={{color: '#FFFFFF'}}>
                   {"No tienes una cuenta? Registrate aquí"}
                 </Link>
               </Grid>
@@ -117,7 +112,7 @@ export default function Login() {
           </Box>
           <br></br>
           {/*si errorMessage no es un valor falsey (vacio), haz el div con el mensaje*/}
-          {errorMessage && <Typography variant="body2" style={{ color: '#99220f' }}>{errorMessage}</Typography>}
+          {errorMessage && <Typography variant="body2" style={{ color: '#AF1212' }}>{errorMessage}</Typography>}
         </Box>
 
       </Container>

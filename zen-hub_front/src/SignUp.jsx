@@ -7,23 +7,12 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import './App.css';
 import NeorisIconLight from './images/NeorisLogoLight.png';
 import { SignUp_Function } from './Functions/SignUp_Functions.js';
-
-
-const theme = createTheme({
-    palette: {
-      mode: 'dark',
-      primary: {
-        main: '#1B242A', 
-      },
-      secondary: {
-        main: '#F3F2F2', 
-      },
-    },
-  });
+import { theme } from './theme.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
   
@@ -33,8 +22,9 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     //Verificar que ningun campo este vació
@@ -42,9 +32,14 @@ export default function SignUp() {
       setErrorMessage("Favor de llenar todos los campos requeridos")
       return;
     }
-
-    SignUp_Function(name, lastName, username, email, password);
-    };
+    try{
+      await SignUp_Function(name, lastName, username, email, password);
+      navigate('/homepage');
+    } catch (error) {
+      setErrorMessage("Error al registrarse:" + error.message);
+      return;
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -76,9 +71,9 @@ export default function SignUp() {
                   onChange = {(e) => setName(e.target.value)}
                   InputLabelProps={{
                     sx: {
-                      color: '#F3F2F2',
+                      color: '#FFFFFF',
                       '&.Mui-focused': {
-                        color: '#F3F2F2',
+                        color: '#FFFFFF',
                       },
                     },
                   }}
@@ -95,9 +90,9 @@ export default function SignUp() {
                   onChange = {(e) => setLastName(e.target.value)}
                   InputLabelProps={{
                     sx: {
-                      color: '#F3F2F2',
+                      color: '#FFFFFF',
                       '&.Mui-focused': {
-                        color: '#F3F2F2',
+                        color: '#FFFFFF',
                       },
                     },
                   }}
@@ -114,9 +109,9 @@ export default function SignUp() {
                   onChange = {(e) => setUsername(e.target.value)}
                   InputLabelProps={{
                     sx: {
-                      color: '#F3F2F2',
+                      color: '#FFFFFF',
                       '&.Mui-focused': {
-                        color: '#F3F2F2',
+                        color: '#FFFFFF',
                       },
                     },
                   }}
@@ -133,9 +128,9 @@ export default function SignUp() {
                   onChange = {(e) => setEmail(e.target.value)}
                   InputLabelProps={{
                     sx: {
-                      color: '#F3F2F2',
+                      color: '#FFFFFF',
                       '&.Mui-focused': {
-                        color: '#F3F2F2',
+                        color: '#FFFFFF',
                       },
                     },
                   }}
@@ -153,9 +148,9 @@ export default function SignUp() {
                   onChange = {(e) => setPassword(e.target.value)}
                   InputLabelProps={{
                     sx: {
-                      color: '#F3F2F2',
+                      color: '#FFFFFF',
                       '&.Mui-focused': {
-                        color: '#F3F2F2',
+                        color: '#FFFFFF',
                       },
                     },
                   }}
@@ -166,13 +161,13 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, color: '#FFFFFF', backgroundColor: '#1B242A' }}
             >
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href ="/" variant="body2" sx = {{color: '#F3F2F2'}}>
+                <Link href ="/" variant="body2" sx = {{color: '#FFFFFF'}}>
                   Ya tienes una cuenta? Inicia Sesión
                 </Link>
               </Grid>
@@ -180,7 +175,7 @@ export default function SignUp() {
           </Box>
           <br></br>
           {/*si errorMessage no es un valor falsey (vacio), haz el div con el mensaje*/}
-          {errorMessage && <Typography variant="body2" style={{ color: '#99220f' }}>{errorMessage}</Typography>}
+          {errorMessage && <Typography variant="body2" style={{ color: '#AF1212' }}>{errorMessage}</Typography>}
         </Box>
       </Container>
     </ThemeProvider>
