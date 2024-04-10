@@ -8,7 +8,7 @@ import CSSBaseline from '@mui/material/CssBaseline';
 import Avatar from '@mui/material/Avatar';
 import { useState, useEffect } from 'react';
 import '../App.css';
-import { getUserName, getUserPath, getRandomPaths } from '../Functions/HomePage_Functions.js';
+import { getUserName, getUserPath, getRandomPaths, getCoursesUser } from '../Functions/HomePage_Functions.js';
 import ResponsiveAppBar from '../AppBar.jsx';
 import DropDown from './DropDown.jsx';
 
@@ -26,6 +26,7 @@ export default function HomePage() {
     const [userName, setUsername] = useState("");
     const [userPath, setUserPath] = useState("");
     const [randomPaths, setRandomPaths] = useState([]);
+    const [userCourses, setUserCourses] = useState([]);
     
 
     useEffect(() => {
@@ -64,6 +65,17 @@ export default function HomePage() {
     fetchRandomPaths();
     }, []);
 
+    useEffect(() => {
+        const fetchUserCourses = async () => {
+        try{
+            const retrievedCourses = await getCoursesUser();
+            setUserCourses(retrievedCourses);
+        } catch (error){
+            console.error("Error en la solicitud fetch: ", error);
+        }
+    };
+    fetchUserCourses();
+    }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -80,8 +92,10 @@ export default function HomePage() {
                 sx={{ marginLeft: '10px', width: '52px', height: '52px'}}/>
             <strong style={{marginLeft: '17px', marginTop: '8px', fontSize: '25px'}}>{userName}</strong>
             </article>
-            <div style = {{display: 'flex', marginTop: '55px' }}>
-                <span style={{marginLeft: '20px', marginTop: '8px', fontSize: '20px'}}>{`Mi Path: ${userPath}`}</span>
+            <div style={{display: 'flex', marginTop: '55px'}}>
+                <span style={{marginLeft: '20px', marginTop: '8px', fontSize: '20px', textAlign: 'left'}}>
+                    {`Mi Path:`} <br/> {`${userPath}`}
+                </span>
             </div>
             <div style = {{display: 'flex', marginTop: '55px' }}>
                 <DropDown randomPaths={randomPaths}/>
@@ -92,7 +106,11 @@ export default function HomePage() {
         <Grid container direction="column">
             <Grid item container>
             <Grid item xs={6}>
-                <Item sx={{ height: '190px', margin: '8px' }}></Item>
+                <Item sx={{ height: '190px', margin: '8px' }}>
+                    <div style = {{display: 'flex' }}>
+                        <strong style={{marginLeft: '15px', marginTop: '20px', fontSize: '22px'}}>{`Cursos Completados: ${userCourses}`}</strong>
+                    </div>
+                </Item>
             </Grid>
             <Grid item xs={6}>
                 <Item sx={{ height: '190px', margin: '8px' }}></Item>
