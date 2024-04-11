@@ -123,9 +123,10 @@ export const getCoursesUser = async () => {
 
         const {courses} = response
 
-        const coursesName = courses.map((course) => course.name);
+        //const coursesName = courses.map((course) => course.name);
 
-        return coursesName;
+
+        return courses;
 
     } catch (error) {
         console.error("Error en la solicitud fetch: ", error);
