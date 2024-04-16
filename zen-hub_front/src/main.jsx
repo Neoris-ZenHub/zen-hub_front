@@ -4,6 +4,7 @@ import './index.css';
 import Login from './Login';
 import SignUp from './SignUp';
 import HomePage from './HomePage/HomePage';
+import Ranking from './Ranking/Ranking';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -14,6 +15,7 @@ root.render(
         <Route path = '/' element = {<Login />} />
         <Route path = '/signup' element = {<SignUp />} />
         <Route path = '/homepage' element = {<HomePage />} />
+        <Route path = '/ranking' element = {<Ranking />} />
         <Route path = '*' element = {<Navigate to = '/' />}/>
       </Routes>
     </Router>

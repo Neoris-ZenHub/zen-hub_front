@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
-const pages = ['Homepage', 'Game', 'MarketPlace'];
+const pages = ['Homepage', 'Paths','Game', 'MarketPlace', 'Ranking'];
 const settings = ['Logout'];
 
 function ResponsiveAppBar() {
