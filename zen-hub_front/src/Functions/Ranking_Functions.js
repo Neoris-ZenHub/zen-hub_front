@@ -32,3 +32,6 @@ export const getAllPaths = async () => {
         return ["Prueba", "Prueba 2", "Prueba 3", "Prueba 4"];
     }
 }
+
+
+

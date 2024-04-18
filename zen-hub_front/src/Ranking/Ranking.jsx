@@ -9,7 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import { useState, useEffect } from 'react';
 import '../App.css';
 import ResponsiveAppBar from '../AppBar.jsx';
-import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import VirtualTable from './VirtualTable.jsx';
 import { getUserName } from '../Functions/HomePage_Functions.js';
 import RadioButtonsGroup from './RadioButton.jsx';
@@ -28,6 +28,11 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function Ranking() {
 
     const [userName, setUsername] = useState("");
+    const [ranking, setRanking] = useState([]);
+    const [sortField, setSortField] = useState("Global");
+    const [orderField, setOrderField] = useState("puntaje")
+    const [userSearch, setUserSearch] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         const fetchUserName = async () => {
@@ -41,6 +46,69 @@ export default function Ranking() {
     fetchUserName();
     }, []);
 
+    useEffect(() => {
+        const fetchInitialRanking = async () => {
+          try {
+            const response = await fetchRanking(sortField, orderField, userSearch);
+            if (response.user) {
+                setRanking([response.user]);
+                setErrorMessage("");
+            } else if (response.message === "User not found") {
+                setErrorMessage("Usuario no encontrado");
+            } else {
+                const {users} = response;
+                setRanking(users);
+                setErrorMessage("");
+            }
+          } catch (error) {
+            console.error("Error en la solicitud fetch: ", error);
+          }
+        };
+        fetchInitialRanking();
+      }, [sortField, orderField, userSearch]);
+
+    const handlePathChange = async (newValue) => {
+        if (!newValue) {
+            return;
+          }
+
+        setSortField(newValue);
+      };
+      
+      const handleRadioChange = async (newValue) => {
+        if (!newValue) {
+            return;
+          }
+        setOrderField(newValue);
+      };
+
+    const fetchRanking = async (sortField, orderField, userSearch) => {
+        const rankingURL = `http://localhost:4000/users/ranking?sortField=${encodeURIComponent(sortField)}&orderField=${encodeURIComponent(orderField)}&userSearch=${encodeURIComponent(userSearch)}`;
+    
+        const token = localStorage.getItem('token');
+    
+        const data = await fetch(rankingURL, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+        });
+        if (!data.ok) {
+        throw new Error(`Error HTTP: ${data.status}`);
+        }
+        const response = await data.json();
+
+        if (response.user) {
+            setRanking([response.user]);
+            setErrorMessage("");
+          } else if (response.message === "User not found") {
+            setErrorMessage("Usuario no encontrado");
+          } else {
+            const {users} = response;
+            setRanking(users);
+            setErrorMessage("");
+          }
+        };
 
     return (
         <ThemeProvider theme={theme}>
@@ -59,15 +127,38 @@ export default function Ranking() {
             </article>
             <div style = {{display: 'flex', justifyContent: 'center', marginTop: '90%', marginRight: '35%' }}>
             <Box marginTop = {'-100%'}>
-                <SearchableDropdown />
+                <strong style={{ fontSize: '22px'}}> Global o por Path:</strong>
+                <Box marginTop = {'5%'}>
+                <SearchableDropdown 
+                    onPathChange = {handlePathChange}
+                />
+                </Box>
             </Box>
             </div>
-            <div style = {{display: 'flex', justifyContent: 'center', marginTop: '5%' }}>
-            <Box marginRight = {'55%'}>
-                <RadioButtonsGroup />
+            <div style = {{display: 'flex', justifyContent: 'center', marginTop: '-25%' }}>
+            <Box marginRight = {'52.5%'}>
+                <RadioButtonsGroup 
+                    onRadioChange={handleRadioChange}/>
             </Box>
             
             </div>
+            <Box marginTop = {'20%'} marginRight = {'0%'} marginLeft={'-2%'}>
+                <Box textAlign='left' marginLeft={'6%'}>
+                <strong style={{ fontSize: '22px'}}> Buscar Usuario</strong>
+                </Box>
+                <Box marginTop = {'5%'}>
+                <TextField
+                style = {{width: '90%'}}
+                label="Nombre de Usuario a Buscar"
+                variant="outlined"
+                onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                        setUserSearch(event.target.value);
+                    } 
+                }}
+                />
+                </Box>
+            </Box>
         </Item>
         </Grid>
 
@@ -78,9 +169,13 @@ export default function Ranking() {
                     Ranking:
                 </strong>
             </div>
-            <Box sx={{ marginTop: '8%', display: 'flex', justifyContent: 'center' }}>
-                <VirtualTable />
-
+            <Box sx={{ height: '25px', marginTop: '2%', display: 'flex', justifyContent: 'center' }}>
+                <strong style={{ fontSize: '22px', textAlign: 'center'}}>
+                    {errorMessage}
+                </strong>
+            </Box>
+            <Box sx={{ marginTop: '3%', display: 'flex', justifyContent: 'center' }}>
+                <VirtualTable data={ranking} />
             </Box>
             </Item>
             </Grid>
@@ -90,4 +185,5 @@ export default function Ranking() {
         </Box>
         </ThemeProvider>
     );
+
 }

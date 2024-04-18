@@ -8,23 +8,29 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TableVirtuoso } from 'react-virtuoso';
 
-const sample = [
+/*const sample = [
   ['Usuario_Test1', 'I.A Generativa', 800, 600, 4000],
   ['Usuario_Test2', 'Backend Development', 650, 650, 3760],
   ['Usuario_Test3', 'Project Management', 450, 500, 3400],
   ['Usuario_Test4', 'Frontend Development', 210, 900, 3210],
   ['Usuario_Test5', 'I.A Generatva   ', 70, 1250, 3070],
-];
+];*/
 
-function createData(id, usuario, path, tiempo, neorimas, puntaje) {
-  return { id, usuario, path, tiempo, neorimas, puntaje };
+function createData(rank, username, path, minutes, neorimas, points) {
+  return { rank, username, path, minutes, neorimas, points };
 }
 
 const columns = [
   {
+    width: 70,
+    label: 'Ranking',
+    dataKey: 'rank',
+    numeric: true,
+  },
+  {
     width: 120,
     label: 'Usuario',
-    dataKey: 'usuario',
+    dataKey: 'username',
   },
   {
     width: 140,
@@ -34,7 +40,7 @@ const columns = [
   {
     width: 100,
     label: 'Tiempo',
-    dataKey: 'tiempo',
+    dataKey: 'minutes',
     numeric: true,
   },
   {
@@ -46,15 +52,11 @@ const columns = [
   {
     width: 100,
     label: 'Puntaje',
-    dataKey: 'puntaje',
+    dataKey: 'points',
     numeric: true,
   }
 ];
 
-const rows = Array.from({ length: 50 }, (_, index) => {
-  const randomSelection = sample[Math.floor(Math.random() * sample.length)];
-  return createData(index, ...randomSelection);
-});
 
 const Scroller = React.forwardRef((props, ref) => (
     <TableContainer component={Paper} {...props} ref={ref} />
@@ -80,17 +82,6 @@ const VirtuosoTableComponents = {
   function fixedHeaderContent() {
     return (
       <TableRow>
-        <TableCell
-          key="ranking"
-          variant="head"
-          align="right"
-          style={{ width: 70 }} // Ajusta este valor según tus necesidades
-          sx={{
-            backgroundColor: 'background.paper',
-          }}
-        >
-          Ranking
-        </TableCell>
         {columns.map((column) => (
           <TableCell
             key={column.dataKey}
@@ -111,7 +102,6 @@ const VirtuosoTableComponents = {
 function rowContent(index, row) {
   return (
     <React.Fragment>
-     <TableCell align="right">{index + 1}</TableCell>
       {columns.map((column) => (
         <TableCell
           key={column.dataKey}
@@ -124,7 +114,12 @@ function rowContent(index, row) {
   );
 }
 
-export default function VirtualTable() {
+// eslint-disable-next-line react/prop-types
+export default function VirtualTable( { data } ) {
+
+  // eslint-disable-next-line react/prop-types
+  const rows = data.slice(0, 50).map((item) => createData(item.rank, item.username, item.path, item.minutes, item.neorimas, item.points));
+
   return (
     <Paper style={{ height: '62vh', width: '95%' }}>
         <TableVirtuoso
