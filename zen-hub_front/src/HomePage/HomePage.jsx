@@ -99,8 +99,8 @@ export default function HomePage() {
             <Avatar 
                 alt="User Avatar" 
                 src= {`https://unavatar.io/${userName}`} 
-                sx={{ marginLeft: '15px', width: '52px', height: '52px'}}/>
-            <strong style={{marginLeft: '17px', marginTop: '8px', fontSize: '25px'}}>{userName}</strong>
+                sx={{ marginLeft: '2%', width: '52px', height: '52px'}}/>
+            <strong style={{marginLeft: '6%', marginTop: '2.5%', fontSize: '25px'}}>{userName}</strong>
             </article>
             <div style={{display: 'flex', marginTop: '55px'}}>
                 <span style={{marginLeft: '25px', marginTop: '8px', fontSize: '20px', textAlign: 'left'}}>

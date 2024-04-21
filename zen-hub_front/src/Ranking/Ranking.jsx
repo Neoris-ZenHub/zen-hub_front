@@ -12,6 +12,7 @@ import ResponsiveAppBar from '../AppBar.jsx';
 import TextField from '@mui/material/TextField';
 import VirtualTable from './VirtualTable.jsx';
 import { getUserName } from '../Functions/HomePage_Functions.js';
+import { fetchRanking } from '../Functions/Ranking_Functions.js';
 import RadioButtonsGroup from './RadioButton.jsx';
 import SearchableDropdown from './SearchableDropdown.jsx';
 
@@ -82,33 +83,6 @@ export default function Ranking() {
         setOrderField(newValue);
       };
 
-    const fetchRanking = async (sortField, orderField, userSearch) => {
-        const rankingURL = `http://localhost:4000/users/ranking?sortField=${encodeURIComponent(sortField)}&orderField=${encodeURIComponent(orderField)}&userSearch=${encodeURIComponent(userSearch)}`;
-    
-        const token = localStorage.getItem('token');
-    
-        const data = await fetch(rankingURL, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-        });
-        if (!data.ok) {
-        throw new Error(`Error HTTP: ${data.status}`);
-        }
-        const response = await data.json();
-
-        if (response.user) {
-            setRanking([response.user]);
-            setErrorMessage("");
-          } else if (response.message === "User not found") {
-            setErrorMessage("Usuario no encontrado");
-          } else {
-            const {users} = response;
-            setRanking(users);
-            setErrorMessage("");
-          }
-        };
 
     return (
         <ThemeProvider theme={theme}>
@@ -122,8 +96,8 @@ export default function Ranking() {
             <Avatar 
                 alt="User Avatar" 
                 src= {`https://unavatar.io/${userName}`} 
-                sx={{ marginLeft: '15px', width: '52px', height: '52px'}}/>
-            <strong style={{marginLeft: '17px', marginTop: '8px', fontSize: '25px'}}>{userName}</strong>
+                sx={{ marginLeft: '2%', width: '52px', height: '52px'}}/>
+            <strong style={{marginLeft: '6%', marginTop: '2.5%', fontSize: '25px'}}>{userName}</strong>
             </article>
             <div style = {{display: 'flex', justifyContent: 'center', marginTop: '90%', marginRight: '35%' }}>
             <Box marginTop = {'-100%'}>

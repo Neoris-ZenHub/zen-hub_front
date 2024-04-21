@@ -33,5 +33,19 @@ export const getAllPaths = async () => {
     }
 }
 
+export const fetchRanking = async (sortField, orderField, userSearch) => {
+    const rankingURL = `http://localhost:4000/users/ranking?sortField=${encodeURIComponent(sortField)}&orderField=${encodeURIComponent(orderField)}&userSearch=${encodeURIComponent(userSearch)}`;
 
+    const token = localStorage.getItem('token');
 
+    const data = await fetch(rankingURL, {
+    method: 'GET',
+    headers: {
+        'Authorization': `Bearer ${token}`,
+    },
+    });
+    if (!data.ok) {
+    throw new Error(`Error HTTP: ${data.status}`);
+    }
+    return await data.json();
+} 
