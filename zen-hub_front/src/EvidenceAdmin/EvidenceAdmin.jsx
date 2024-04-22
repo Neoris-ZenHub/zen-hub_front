@@ -11,7 +11,7 @@ import '../App.css';
 import ResponsiveAppBar from '../AppBar.jsx';
 import TextField from '@mui/material/TextField';
 import { getUserName } from '../Functions/HomePage_Functions.js';
-import { fetchEvidences } from '../Functions/EvidenceAdmin_Functions.js';
+import { fetchEvidences, checkEvidenceFunction } from '../Functions/EvidenceAdmin_Functions.js';
 import RadioButtonsAdmin from './RadioButtonAdmin.jsx';
 import SearchableDropdownAdmin from './SearchableDropdownAdmin.jsx';
 import Button from '@mui/material/Button';
@@ -111,10 +111,30 @@ export default function EvidenceAdmin() {
         }
       };
 
+      const submitValidation = async () => {
+        if (evidences[currentIndex].status === false) {
+          try {
+            const response = await checkEvidenceFunction(evidences[currentIndex].id_evidence, progress, evidences[currentIndex].course);
+            if (response.ok) {
+              setEvidences(prevEvidences => 
+                prevEvidences.map((evidence, index) => 
+                  index === currentIndex ? {...evidence, status: true} : evidence
+                )
+              );
+            }
+          } catch (error) {
+            console.error('Error al verificar la evidencia:', error);
+          }
+        } else {
+          console.log('La evidencia ya ha sido verificada.');
+        }
+      }
+
       if (errorMessage === "No tienes permisos para ver esta información") {
         return (
             <ThemeProvider theme={theme}>
             <CSSBaseline />
+            <ResponsiveAppBar />
               <Grid item xs={9} md={9}>
                 <Item sx={{ height: '825px', margin: '8px'}}>
                   <Box display="flex" justifyContent="center" alignItems="center" height="100%">
@@ -130,6 +150,7 @@ export default function EvidenceAdmin() {
         return (
         <ThemeProvider theme={theme}>
         <CSSBaseline />
+        <ResponsiveAppBar />
           <Grid item xs={9} md={9}>
             <Item sx={{ height: '825px', margin: '8px'}}>
               <Box display="flex" justifyContent="center" alignItems="center" height="100%">
@@ -211,15 +232,24 @@ export default function EvidenceAdmin() {
                 <div style={{width: '100%', position: 'relative', height: '550px'}}>
                 <img src={imageSrc} alt="Uploaded file" style={{position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'contain'}} />
                 </div>
+                </div>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '-70px', marginLeft: '35.5%', width: '30%' }}>
                 <TextField
-                label="Progreso"
-                value={progress}
-                onChange={(e) => setProgress(e.target.value)}
-                style={{marginTop: '-50px', marginBottom: '-100px', width: '260px'}}
+                    label="Progreso"
+                    value={progress}
+                    onChange={(e) => setProgress(e.target.value)}
+                    style={{ width: '260px' }}
                 />
+                <Button variant="contained" onClick={submitValidation}>
+                    Submit
+                </Button>
+
+                {evidences[currentIndex].status && (
+                  <p>Esta evidencia ya ha sido calificada.</p>
+                )}
             </div>
-            </div>
-            <div style = {{display: 'flex', justifyContent: 'space-between', marginLeft: '7%', marginRight: '7%', marginTop: '1%'}}>
+            <div style = {{display: 'flex', justifyContent: 'space-between', marginLeft: '7%', marginRight: '7%', marginTop: '2.5%'}}>
             <Button variant="contained" onClick={handlePrevious} startIcon={<ArrowBackIcon />}>
                 Anterior
             </Button>
