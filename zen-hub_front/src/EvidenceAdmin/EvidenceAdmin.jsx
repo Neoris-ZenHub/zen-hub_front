@@ -114,18 +114,21 @@ export default function EvidenceAdmin() {
       const submitValidation = async () => {
         if (evidences[currentIndex].status === false) {
           try {
-            const response = await checkEvidenceFunction(evidences[currentIndex].id_evidence, progress, evidences[currentIndex].course);
-            if (response.ok) {
+            
+            await checkEvidenceFunction(evidences[currentIndex].id_evidence, progress, evidences[currentIndex].course);
+            
               setEvidences(prevEvidences => 
                 prevEvidences.map((evidence, index) => 
                   index === currentIndex ? {...evidence, status: true} : evidence
                 )
               );
-            }
+              setCurrentIndex(prevIndex => prevIndex);
+             alert('Evidencia verificada correctamente')
           } catch (error) {
             console.error('Error al verificar la evidencia:', error);
           }
         } else {
+          alert('La evidencia ya ha sido verificada.');
           console.log('La evidencia ya ha sido verificada.');
         }
       }
@@ -244,19 +247,22 @@ export default function EvidenceAdmin() {
                 <Button variant="contained" onClick={submitValidation}>
                     Submit
                 </Button>
-
-                {evidences[currentIndex].status && (
-                  <p>Esta evidencia ya ha sido calificada.</p>
-                )}
             </div>
+            <div style={{ position: 'relative' }}>
+            {currentItem.status && (
+              <p style={{ position: 'absolute', top: 0, left: 0, right: 0, textAlign: 'center' }}>
+              Esta evidencia ya ha sido calificada.
+            </p>
+            )}
             <div style = {{display: 'flex', justifyContent: 'space-between', marginLeft: '7%', marginRight: '7%', marginTop: '2.5%'}}>
-            <Button variant="contained" onClick={handlePrevious} startIcon={<ArrowBackIcon />}>
+              <Button variant="contained" onClick={handlePrevious} startIcon={<ArrowBackIcon />}>
                 Anterior
-            </Button>
-            <Button variant="contained" onClick={handleNext} endIcon={<ArrowForwardIcon />}>
+              </Button>
+              <Button variant="contained" onClick={handleNext} endIcon={<ArrowForwardIcon />}>
                 Siguiente
-            </Button>
+              </Button>
             </div>
+          </div>
         </Item>
         </Grid>
 
