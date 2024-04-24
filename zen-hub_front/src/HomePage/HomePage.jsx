@@ -166,15 +166,17 @@ export default function HomePage() {
 
 
                     <div style={{width: '80%', marginTop: '30px', margin: '0 auto'}}>
-                        <img src={LocationSymbol} alt="Location Symbol" style={{width:'16%', height: '16%', display: 'block', marginLeft: `${maxPercentageCourse.percentage}%`}}/>
-                        <div style={{borderBottom: '3px dashed white', height: '3px', width: '90%', margin: '0 auto', boxSizing: 'border-box'}}></div>
-                            <p style={{ fontSize: "22px", marginTop: '2%', textAlign: 'center'}}>
-                                {maxPercentageCourse.percentage}%
-                            </p>
+                        <div style={{position: 'relative', width: '100%', height: '200px'}}>
+                            <img src={LocationSymbol} alt="Location Symbol" style={{width:'16%', height: 'auto', position: 'absolute', left: `calc(${maxPercentageCourse.percentage}% - 8%)`, top: '10%'}}/>
+                            <div style={{borderBottom: '3px dashed white', height: '3px', width: '100%', boxSizing: 'border-box', position: 'absolute', top: '75%'}}></div>
                         </div>
+                        <p style={{ fontSize: "22px", marginTop: '2%', textAlign: 'center'}}>
+                            {maxPercentageCourse.percentage}%
+                        </p>
+                    </div>
                     
                         <a href="https://www.udemy.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                            <Button variant="contained" sx={{marginTop: 'px', bgcolor: '#068abb', borderRadius: '50px'}}>Continuar Curso</Button>
+                            <Button variant="contained" sx={{marginTop: '0%', bgcolor: '#068abb', borderRadius: '50px'}}>Continuar Curso</Button>
                         </a>
                     </div>
             </Item>
