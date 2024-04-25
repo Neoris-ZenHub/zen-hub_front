@@ -7,6 +7,7 @@ import HomePage from './HomePage/HomePage';
 import Ranking from './Ranking/Ranking';
 import EvidenceUser from './EvidenceUser/EvidenceUser';
 import EvidenceAdmin from './EvidenceAdmin/EvidenceAdmin';
+import MarketPlace from './Marketplace/Marketplace';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -20,6 +21,7 @@ root.render(
         <Route path = '/ranking' element = {<Ranking />} />
         <Route path = '/evidence' element = {<EvidenceUser />} />
         <Route path = '/validation' element = {<EvidenceAdmin />} />
+        <Route path = '/marketplace' element = {<MarketPlace />} />
         <Route path = '*' element = {<Navigate to = '/' />}/>
       </Routes>
     </Router>
