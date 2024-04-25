@@ -14,21 +14,26 @@ const Item = styled(Paper)(({ theme }) => ({
     color: "#FFFFFF",
 }));
 
-export default function StoreItem({ key, name, image, color, cost }){
+export default function StoreItem({ id, name, image, color, cost, fetchUserNeorimas }){
 
     const handleBuy = async () => {
-        const response = await buyingSprites(key);
-
-        if (response.message === "Sprite bought successfully"){
+        try {
+          const response = await buyingSprites(id);
+      
+          if (response.message === "Sprite bought successfully") {
             alert("Compra Exitosa!");
-        }  else if (response.message === "Insufficient neorimas to complete purchase"){
+            fetchUserNeorimas();
+          }else if (response.message === "Sprite already bought") {
+              alert("Ya tienes este sprite");
+          } else if (response.message === "Insufficient neorimas to complete purchase") {
             alert("No tienes suficientes Neorimas");
-        } else if (response.message === "Sprite already bought"){
-            alert("Ya tienes este sprite");
-        } else {
-            alert("Ocurrió un error al intentar completar la compra")
+          } else {
+            alert("Ocurrió un error al intentar completar la compra");
+          }
+        } catch (error) {
+          console.error("Error al comprar sprite: ", error.message);
         }
-    }
+      };
 
     return (
         <Item style={{backgroundColor: color, width: '250px', height: '230px', borderRadius: '10px'}}>

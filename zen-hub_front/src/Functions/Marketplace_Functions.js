@@ -52,30 +52,26 @@ export const getNeorimas = async () => {
 
 export const buyingSprites = async (spriteId) => {
     try {
-        const buySpriteURL = `http://localhost:4000/sprite/`;
-
-        const token = localStorage.getItem('token');
-
-        const data = await fetch(buySpriteURL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                _id_sprite: spriteId,
-            }),
-        });
-        
-        if (!data.ok) {
-            throw new Error(`Error HTTP: ${data.status}`);
-        }
-    
-        const response = await data.json();
-
-        return response;
-        
+      const buySpriteURL = `http://localhost:4000/sprite/`;
+  
+      const token = localStorage.getItem('token');
+  
+      const data = await fetch(buySpriteURL, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          _id_sprite: spriteId,
+        }),
+      });
+  
+      const response = await data.json();
+  
+      return { ok: data.ok, ...response }; // Devuelve la respuesta incluso si no es exitosa
     } catch (error) {
-        console.error("Error en la solicitud fetch: ", error);
+      console.error("Error en la solicitud fetch: ", error);
+      throw error;
     }
-}
+  };

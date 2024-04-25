@@ -33,6 +33,7 @@ export default function Login() {
     try{
       await Login_Function(email, password);
       navigate('/homepage');
+      window.location.reload();
     } catch (error) {
       setErrorMessage("Error al iniciar sesión:" + error.message);
       return;

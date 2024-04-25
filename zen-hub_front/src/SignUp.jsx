@@ -35,6 +35,7 @@ export default function SignUp() {
     try{
       await SignUp_Function(name, lastName, username, email, password);
       navigate('/homepage');
+      window.location.reload();
     } catch (error) {
       setErrorMessage("Error al registrarse:" + error.message);
       return;

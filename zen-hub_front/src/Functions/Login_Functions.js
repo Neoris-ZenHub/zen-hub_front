@@ -25,7 +25,6 @@ export const Login_Function = async (email, password) => {
 
 
     console.log("Datos enviados a la API");
-    alert("Enviado Correctamente");
 
     } catch (error) {
         console.error("Error en la solicitud fetch: ", error);

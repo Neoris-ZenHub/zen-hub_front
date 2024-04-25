@@ -23,7 +23,6 @@ export const SignUp_Function = async (name, last_name, username, password, email
     localStorage.setItem('token', response.token)
 
     console.log("Datos enviados a la API");
-    alert("Usuario Creado Correctamente");
 
     } catch (error) {
         console.error("Error en la solicitud fetch: ", error);

@@ -12,7 +12,6 @@ import IconLight from '../images/Icon-light.png';
 import { getUserName } from '../Functions/HomePage_Functions.js';
 import { getNeorimas, getRandomStoreItems } from '../Functions/Marketplace_Functions.js';
 import ResponsiveAppBar from '../AppBar.jsx';
-import Button from '@mui/material/Button';
 import StoreItem from './StoreItems.jsx';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -41,16 +40,17 @@ export default function MarketPlace(){
     fetchUserName();
     }, []);
 
-    useEffect(() => {
-        const fetchUserNeorimas = async () => {
+    const fetchUserNeorimas = async () => {
         try{
-        const neorimas = await getNeorimas();
-        setNeorimas(neorimas);
+            const neorimas = await getNeorimas();
+            setNeorimas(neorimas);
         } catch (error){
             console.error("Error en la solicitud fetch: ", error);
         }
     };
-    fetchUserNeorimas();
+
+    useEffect(() => {
+        fetchUserNeorimas();
     }, []);
 
     useEffect(() => {
@@ -100,6 +100,7 @@ export default function MarketPlace(){
                         <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '60px 90px', maxWidth: '90%'}}>
                             {sprites.map((sprite) => (
                                 <StoreItem 
+                                    id = {sprite._id_sprite}
                                     key={sprite._id_sprite} 
                                     name={sprite.name} 
                                     image={`data:image/jpeg;base64,${sprite.sprite_image}`} 
@@ -109,6 +110,7 @@ export default function MarketPlace(){
                                         sprite.rarity === 'legendary' ? 'darkgoldenrod' : 'silver'
                                     }
                                     cost={sprite.price}
+                                    fetchUserNeorimas={fetchUserNeorimas}
                                 />
                             ))}
                         </div>

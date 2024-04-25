@@ -17,6 +17,7 @@ import SearchableDropdownAdmin from './SearchableDropdownAdmin.jsx';
 import Button from '@mui/material/Button';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Dialog from '@mui/material/Dialog';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -38,6 +39,7 @@ export default function EvidenceAdmin() {
     const [evidences, setEvidences] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [progress, setProgress] = useState(0);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const fetchUserName = async () => {
@@ -111,6 +113,14 @@ export default function EvidenceAdmin() {
         }
       };
 
+      const handleClickOpen = () => {
+        setOpen(true);
+      };
+
+      const handleClose = () => {
+        setOpen(false);
+      };
+
       const submitValidation = async () => {
         if (evidences[currentIndex].status === false) {
           try {
@@ -157,7 +167,7 @@ export default function EvidenceAdmin() {
           <Grid item xs={9} md={9}>
             <Item sx={{ height: '825px', margin: '8px'}}>
               <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-                <div>Loading...</div>
+                <div>No evidences to validate</div>
               </Box>
             </Item>
           </Grid>
@@ -232,12 +242,18 @@ export default function EvidenceAdmin() {
                     {errorMessage}
                 </strong>
                 </Box>
-                <div style={{width: '100%', position: 'relative', height: '550px'}}>
-                <img src={imageSrc} alt="Uploaded file" style={{position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'contain'}} />
+                <div style={{width: '100%', position: 'relative', height: '520px'}}>
+                <div onClick={handleClickOpen}>
+                  <img src={imageSrc} alt="Uploaded file" style={{position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'contain'}} />
+                </div>
+              </div>
+
+              <Dialog open={open} onClose={handleClose}>
+                <img src={imageSrc} alt="Uploaded file" style={{width: '100%', height: '100%', objectFit: 'contain'}} />
+              </Dialog>
                 </div>
                 </div>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '-70px', marginLeft: '35.5%', width: '30%' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '-3%', marginLeft: '35.5%', width: '30%' }}>
                 <TextField
                     label="Progreso"
                     value={progress}
@@ -254,7 +270,7 @@ export default function EvidenceAdmin() {
               Esta evidencia ya ha sido calificada.
             </p>
             )}
-            <div style = {{display: 'flex', justifyContent: 'space-between', marginLeft: '7%', marginRight: '7%', marginTop: '2.5%'}}>
+            <div style = {{display: 'flex', justifyContent: 'space-between', marginLeft: '7%', marginRight: '7%', marginTop: '2.25%'}}>
               <Button variant="contained" onClick={handlePrevious} startIcon={<ArrowBackIcon />}>
                 Anterior
               </Button>

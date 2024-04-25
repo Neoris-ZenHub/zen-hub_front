@@ -12,11 +12,20 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserRoleContext } from './UserRoleContext';
 
-const pages = ['Homepage', 'Paths','Game', 'MarketPlace', 'Ranking', 'Evidence', 'Validation'];
+
 const settings = ['Logout'];
 
 function ResponsiveAppBar() {
+  const userRole = useContext(UserRoleContext);
+
+  const adminPages = ['Homepage', 'Paths','Game', 'MarketPlace', 'Ranking', 'Evidence', 'Validation'];
+  const consumerPages = ['Homepage', 'Paths','Game', 'MarketPlace', 'Ranking', 'Evidence'];
+
+  const pages = userRole === 'admin' ? adminPages : consumerPages;
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
