@@ -3,6 +3,8 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useState } from 'react';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -18,9 +20,13 @@ const VisuallyHiddenInput = styled('input')({
 
 // eslint-disable-next-line react/prop-types
 export default function InputFileUpload( {selectedCourse} ) {
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('');
   const [isFileLoaded, setIsFileLoaded] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -46,8 +52,13 @@ export default function InputFileUpload( {selectedCourse} ) {
   
     if (!response.ok) {
       console.error('Error uploading file:', response.statusText);
+      setAlertType("error");
+      setAlertMessage("Error subiendo archivo");
+      setAlertOpen(true);
     } else {
-      alert('File uploaded successfully');
+      setAlertType("success");
+      setAlertMessage("Archivo subido existosamente");
+      setAlertOpen(true);
       window.location.reload();
     }
   };
@@ -76,6 +87,15 @@ export default function InputFileUpload( {selectedCourse} ) {
             Submit file
             </Button>
         )}
+        <Snackbar
+          open={alertOpen}
+          autoHideDuration={5000}
+          onClose={() => setAlertOpen(false)}
+        >
+          <Alert onClose={() => setAlertOpen(false)} severity={alertType} sx={{ width: '100%' }}>
+            {alertMessage}
+          </Alert>
+        </Snackbar>
         </div>
   );
 }

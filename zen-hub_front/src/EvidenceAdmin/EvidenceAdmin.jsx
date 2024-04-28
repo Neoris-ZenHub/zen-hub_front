@@ -10,7 +10,6 @@ import { useState, useEffect } from 'react';
 import '../App.css';
 import ResponsiveAppBar from '../AppBar.jsx';
 import TextField from '@mui/material/TextField';
-import { getUserName } from '../Functions/HomePage_Functions.js';
 import { fetchEvidences, checkEvidenceFunction } from '../Functions/EvidenceAdmin_Functions.js';
 import RadioButtonsAdmin from './RadioButtonAdmin.jsx';
 import SearchableDropdownAdmin from './SearchableDropdownAdmin.jsx';
@@ -18,6 +17,10 @@ import Button from '@mui/material/Button';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Dialog from '@mui/material/Dialog';
+import { useContext } from 'react';
+import { UserInfoContext } from '../UserInfoContext.jsx';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -31,7 +34,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function EvidenceAdmin() {
 
-    const [userName, setUsername] = useState("");
+    const { userName } = useContext(UserInfoContext);
     const [groupField, setGroupField] = useState("Global");
     const [orderField, setOrderField] = useState("Antiguo")
     const [userSearch, setUserSearch] = useState("");
@@ -40,18 +43,9 @@ export default function EvidenceAdmin() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [progress, setProgress] = useState(0);
     const [open, setOpen] = useState(false);
-
-    useEffect(() => {
-        const fetchUserName = async () => {
-        try{
-        const username = await getUserName();
-        setUsername(username);
-        } catch (error){
-            console.error("Error en la solicitud fetch: ", error);
-        }
-    };
-    fetchUserName();
-    }, []);
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertType, setAlertType] = useState("success");
 
     useEffect(() => {
         const fetchInitialEvidences = async () => {
@@ -133,12 +127,16 @@ export default function EvidenceAdmin() {
                 )
               );
               setCurrentIndex(prevIndex => prevIndex);
-             alert('Evidencia verificada correctamente')
+              setAlertType("success");
+              setAlertMessage("Evidencia verificada correctamente");
+              setAlertOpen(true);
           } catch (error) {
             console.error('Error al verificar la evidencia:', error);
           }
         } else {
-          alert('La evidencia ya ha sido verificada.');
+          setAlertType("warning");
+          setAlertMessage("La evidencia ya ha sido verificada");
+          setAlertOpen(true);
           console.log('La evidencia ya ha sido verificada.');
         }
       }
@@ -242,7 +240,7 @@ export default function EvidenceAdmin() {
                     {errorMessage}
                 </strong>
                 </Box>
-                <div style={{width: '100%', position: 'relative', height: '520px'}}>
+                <div style={{width: '100%', position: 'relative', height: '520px', marginTop: '-5%'}}>
                 <div onClick={handleClickOpen}>
                   <img src={imageSrc} alt="Uploaded file" style={{position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'contain'}} />
                 </div>
@@ -270,7 +268,7 @@ export default function EvidenceAdmin() {
               Esta evidencia ya ha sido calificada.
             </p>
             )}
-            <div style = {{display: 'flex', justifyContent: 'space-between', marginLeft: '7%', marginRight: '7%', marginTop: '2.25%'}}>
+            <div style = {{display: 'flex', justifyContent: 'space-between', marginLeft: '7%', marginRight: '7%', marginTop: '2.5%'}}>
               <Button variant="contained" onClick={handlePrevious} startIcon={<ArrowBackIcon />}>
                 Anterior
               </Button>
@@ -285,6 +283,15 @@ export default function EvidenceAdmin() {
 
             </Grid>
         </Box>
+        <Snackbar
+          open={alertOpen}
+          autoHideDuration={5000}
+          onClose={() => setAlertOpen(false)}
+        >
+          <Alert onClose={() => setAlertOpen(false)} severity={alertType} sx={{ width: '100%' }}>
+            {alertMessage}
+          </Alert>
+        </Snackbar>
         </ThemeProvider>
     );
 

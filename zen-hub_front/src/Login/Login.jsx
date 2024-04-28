@@ -8,10 +8,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
-import NeorisIconLight from './images/NeorisLogoLight.png';
-import './App.css';
-import { Login_Function } from './Functions/Login_Functions.js';
-import { theme } from './theme.js';
+import NeorisIconLight from '../images/NeorisLogoLight.png';
+import '../App.css';
+import { Login_Function } from '../Functions/Login_Functions.js';
+import { theme } from '../theme.js';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {

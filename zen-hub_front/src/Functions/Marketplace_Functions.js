@@ -12,7 +12,7 @@ export const getRandomStoreItems = async () => {
     if (!data.ok) {
     throw new Error(`Error HTTP: ${data.status}`);
     }
-    const {sprites} =  await data.json();
+    const {sprites} = await data.json();
 
     return sprites;
 } 

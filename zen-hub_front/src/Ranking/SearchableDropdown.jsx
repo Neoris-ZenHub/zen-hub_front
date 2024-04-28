@@ -4,7 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { getAllPaths } from '../Functions/Ranking_Functions';
 
 // eslint-disable-next-line react/prop-types
-export default function SearchableDropdown( {onPathChange} ) {
+export default function SearchableDropdown( {onPathChange, call} ) {
 
     const [paths, setPaths] = useState([]);
 
@@ -12,13 +12,16 @@ export default function SearchableDropdown( {onPathChange} ) {
         const fetchPaths = async () => {
         try{
         const paths = await getAllPaths();
-        paths.unshift("Global")
+        if (call === "Ranking"){
+            paths.unshift("Global")
+        }
         setPaths(paths);
         } catch (error){
             console.error("Error en la solicitud fetch: ", error);
         }
     };
     fetchPaths();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <Autocomplete

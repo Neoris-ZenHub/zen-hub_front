@@ -9,10 +9,11 @@ import Avatar from '@mui/material/Avatar';
 import { useState, useEffect } from 'react';
 import '../App.css';
 import IconLight from '../images/Icon-light.png';
-import { getUserName } from '../Functions/HomePage_Functions.js';
 import { getNeorimas, getRandomStoreItems } from '../Functions/Marketplace_Functions.js';
 import ResponsiveAppBar from '../AppBar.jsx';
 import StoreItem from './StoreItems.jsx';
+import { useContext } from 'react';
+import { UserInfoContext } from '../UserInfoContext.jsx';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main, // Usa el color principal del tema
@@ -24,21 +25,9 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function MarketPlace(){
 
-    const [userName, setUsername] = useState("");
+    const { userName } = useContext(UserInfoContext);
     const [neorimas, setNeorimas] = useState(0);
     const [sprites, setSprites] = useState([]);
-
-    useEffect(() => {
-        const fetchUserName = async () => {
-        try{
-        const username = await getUserName();
-        setUsername(username);
-        } catch (error){
-            console.error("Error en la solicitud fetch: ", error);
-        }
-    };
-    fetchUserName();
-    }, []);
 
     const fetchUserNeorimas = async () => {
         try{

@@ -6,12 +6,13 @@ import { theme } from '../theme.js';
 import { ThemeProvider } from '@emotion/react';
 import CSSBaseline from '@mui/material/CssBaseline';
 import Avatar from '@mui/material/Avatar';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import '../App.css';
 import ResponsiveAppBar from '../AppBar.jsx';
-import { getUserName } from '../Functions/HomePage_Functions.js';
 import SearchableDropdownCourses from './SearchableDropdownCourses.jsx';
 import InputFileUpload from './UploadFile.jsx';
+import { useContext } from 'react';
+import { UserInfoContext } from '../UserInfoContext.jsx';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -26,21 +27,8 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function EvidenceUser(){
 
-    const [userName, setUsername] = useState("");
+    const { userName } = useContext(UserInfoContext);
     const [course, setCourse] = useState([]);
-
-
-    useEffect(() => {
-        const fetchUserName = async () => {
-        try{
-        const username = await getUserName();
-        setUsername(username);
-        } catch (error){
-            console.error("Error en la solicitud fetch: ", error);
-        }
-    };
-    fetchUserName();
-    }, []);
 
     const handleCourseChange = async (newValue) => {
         if (!newValue) {

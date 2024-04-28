@@ -11,10 +11,12 @@ import '../App.css';
 import GreenCheckmark from '../images/Green-Checkmark.png';
 import RedCross from '../images/Red-Cross.png';
 import LocationSymbol from '../images/Location.png';
-import { getUserName, getUserPath, getRandomPaths, getCoursesUser } from '../Functions/HomePage_Functions.js';
+import { getUserPath, getRandomPaths, getCoursesUser } from '../Functions/HomePage_Functions.js';
 import ResponsiveAppBar from '../AppBar.jsx';
 import DropDown from './DropDown.jsx';
 import Button from '@mui/material/Button';
+import { useContext } from 'react';
+import { UserInfoContext } from '../UserInfoContext.jsx';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main, // Usa el color principal del tema
@@ -27,23 +29,11 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function HomePage() {
 
-    const [userName, setUsername] = useState("");
+    const { userName } = useContext(UserInfoContext);
     const [userPath, setUserPath] = useState("");
     const [randomPaths, setRandomPaths] = useState([]);
     const [userCourses, setUserCourses] = useState([]);
     
-
-    useEffect(() => {
-        const fetchUserName = async () => {
-        try{
-        const username = await getUserName();
-        setUsername(username);
-        } catch (error){
-            console.error("Error en la solicitud fetch: ", error);
-        }
-    };
-    fetchUserName();
-    }, []);
 
     useEffect(() => {
         const fetchPaths = async () => {

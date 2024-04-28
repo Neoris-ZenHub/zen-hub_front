@@ -8,13 +8,13 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
-import './App.css';
-import NeorisIconLight from './images/NeorisLogoLight.png';
-import { SignUp_Function } from './Functions/SignUp_Functions.js';
-import { theme } from './theme.js';
+import '../App.css';
+import NeorisIconLight from '../images/NeorisLogoLight.png';
+import { SignUp_Function } from '../Functions/SignUp_Functions.js';
+import { theme } from '../theme.js';
 import { useNavigate } from 'react-router-dom';
 
-export default function SignUp() {
+export default function SignUp( ) {
   
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -34,7 +34,7 @@ export default function SignUp() {
     }
     try{
       await SignUp_Function(name, lastName, username, email, password);
-      navigate('/homepage');
+      navigate('/paths');
       window.location.reload();
     } catch (error) {
       setErrorMessage("Error al registrarse:" + error.message);

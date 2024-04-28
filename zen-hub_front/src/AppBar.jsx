@@ -13,13 +13,13 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
-import { UserRoleContext } from './UserRoleContext';
+import { UserInfoContext } from './UserInfoContext';
 
 
 const settings = ['Logout'];
 
 function ResponsiveAppBar() {
-  const userRole = useContext(UserRoleContext);
+  const {userRole} = useContext(UserInfoContext);
 
   const adminPages = ['Homepage', 'Paths','Game', 'MarketPlace', 'Ranking', 'Evidence', 'Validation'];
   const consumerPages = ['Homepage', 'Paths','Game', 'MarketPlace', 'Ranking', 'Evidence'];

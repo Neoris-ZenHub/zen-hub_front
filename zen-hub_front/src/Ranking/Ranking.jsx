@@ -11,10 +11,11 @@ import '../App.css';
 import ResponsiveAppBar from '../AppBar.jsx';
 import TextField from '@mui/material/TextField';
 import VirtualTable from './VirtualTable.jsx';
-import { getUserName } from '../Functions/HomePage_Functions.js';
 import { fetchRanking } from '../Functions/Ranking_Functions.js';
 import RadioButtonsGroup from './RadioButton.jsx';
 import SearchableDropdown from './SearchableDropdown.jsx';
+import { useContext } from 'react';
+import { UserInfoContext } from '../UserInfoContext.jsx';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -28,24 +29,13 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Ranking() {
 
-    const [userName, setUsername] = useState("");
+    const { userName } = useContext(UserInfoContext);
     const [ranking, setRanking] = useState([]);
     const [sortField, setSortField] = useState("Global");
     const [orderField, setOrderField] = useState("puntaje")
     const [userSearch, setUserSearch] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
-    useEffect(() => {
-        const fetchUserName = async () => {
-        try{
-        const username = await getUserName();
-        setUsername(username);
-        } catch (error){
-            console.error("Error en la solicitud fetch: ", error);
-        }
-    };
-    fetchUserName();
-    }, []);
 
     useEffect(() => {
         const fetchInitialRanking = async () => {
@@ -105,6 +95,7 @@ export default function Ranking() {
                 <Box marginTop = {'5%'}>
                 <SearchableDropdown 
                     onPathChange = {handlePathChange}
+                    call = "Ranking"
                 />
                 </Box>
             </Box>

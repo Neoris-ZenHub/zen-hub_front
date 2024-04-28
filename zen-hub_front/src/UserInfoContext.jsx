@@ -1,11 +1,13 @@
 import { createContext, useState, useEffect } from 'react';
 import { getUserRole } from './Functions/AppBar_Functions';
+import { getUserName } from './Functions/HomePage_Functions';
 
-export const UserRoleContext = createContext();
+export const UserInfoContext = createContext();
 
 // eslint-disable-next-line react/prop-types
-export const UserRoleProvider = ({ children }) => {
+export const UserInfoProvider = ({ children }) => {
     const [userRole, setUserRole] = useState(null);
+    const [userName, setUsername] = useState("");
 
     const getUser = () => {
         const token = localStorage.getItem('token');
@@ -33,9 +35,28 @@ export const UserRoleProvider = ({ children }) => {
     
         fetchUserRole();
     }, []);
+
+        useEffect(() => {
+            const fetchUserName = async () => {
+                // Verifica si el usuario ha iniciado sesión
+                const user = getUser();
+        
+                if (user) {
+                    try {
+                        const name = await getUserName();
+                        setUsername(name);
+                    } catch (error) {
+                        console.error('Error obteniendo el nombre del usuario:', error);
+                    }
+                }
+            };
+        
+            fetchUserName();
+        }, []);
+
     return (
-        <UserRoleContext.Provider value={userRole}>
+        <UserInfoContext.Provider value={{userRole, userName}}>
             {children}
-        </UserRoleContext.Provider>
+        </UserInfoContext.Provider>
     );
 };
