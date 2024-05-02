@@ -38,28 +38,22 @@ export default function SignUp( ) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     //Verificar que ningun campo este vació
     if (!name || !lastName || !username || !email || !password) {
       setErrorMessage("Favor de llenar todos los campos requeridos")
       return;
     }
     try {
-      const response = await SignUp_Function(name, lastName, username, email, password);
-      
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message);
-      }
-    
+      await SignUp_Function(name, lastName, username, email, password);
       navigate('/paths');
       window.location.reload();
+      
     } catch (error) {
-        localStorage.setItem('errorMessage', "Este correo ya está en uso");
-      }
-      window.location.reload();
-      return;
+      localStorage.setItem('errorMessage', "Este correo ya está en uso");
+      setErrorMessage("Este correo ya está en uso");
     }
+  }
 
   return (
     <ThemeProvider theme={theme}>
