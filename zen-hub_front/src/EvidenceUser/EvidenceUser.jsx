@@ -13,6 +13,8 @@ import SearchableDropdownCourses from './SearchableDropdownCourses.jsx';
 import InputFileUpload from './UploadFile.jsx';
 import { useContext } from 'react';
 import { UserInfoContext } from '../UserInfoContext.jsx';
+import { getUserPath } from '../Functions/HomePage_Functions.js';
+import { useEffect } from 'react';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -29,6 +31,22 @@ export default function EvidenceUser(){
 
     const { userName } = useContext(UserInfoContext);
     const [course, setCourse] = useState([]);
+    const [canUpload, setCanUpload] = useState(false);
+
+
+    useEffect(() => {
+        const fetchPaths = async () => {
+        try{
+        const paths = await getUserPath();
+        if (paths.length > 0){
+            setCanUpload(true);
+        }
+        } catch (error){
+            console.error("Error en la solicitud fetch: ", error);
+        }
+    };
+    fetchPaths();
+    }, []);
 
     const handleCourseChange = async (newValue) => {
         if (!newValue) {
@@ -70,8 +88,10 @@ export default function EvidenceUser(){
         <Grid item xs={9} md={9}>
             <Item sx={{ height: '745px', margin: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <strong style={{ fontSize: '22px', marginBottom: '10%' }}>Escoger Evidencia:</strong>
-                <InputFileUpload  selectedCourse = {course}/>
+                <strong style={{ fontSize: '22px', marginBottom: '10%' }}>
+                    {canUpload ? 'Escoger Evidencia:' : 'No es posible subir evidencias sin un path asignado'}
+                </strong>
+                {canUpload && <InputFileUpload selectedCourse={course} />}
             </div>
             </Item>
         </Grid>

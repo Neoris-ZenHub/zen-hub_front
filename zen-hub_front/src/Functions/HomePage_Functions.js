@@ -60,7 +60,7 @@ export const getUserPath = async () => {
 
     } catch (error) {
         console.error("Error en la solicitud fetch: ", error);
-        return "I.A Generativa";
+        return "Sin Path Asignado";
     }
 }
 

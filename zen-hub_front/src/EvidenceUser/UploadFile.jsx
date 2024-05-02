@@ -24,9 +24,9 @@ export default function InputFileUpload( {selectedCourse} ) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('');
   const [isFileLoaded, setIsFileLoaded] = useState(false);
-  const [alertOpen, setAlertOpen] = useState(false);
-  const [alertType, setAlertType] = useState("success");
-  const [alertMessage, setAlertMessage] = useState("");
+  const [alertOpen, setAlertOpen] = useState(localStorage.getItem('alertOpen') === 'true');
+  const [alertType, setAlertType] = useState(localStorage.getItem('alertType') || 'success');
+  const [alertMessage, setAlertMessage] = useState(localStorage.getItem('alertMessage') || '');
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -52,15 +52,15 @@ export default function InputFileUpload( {selectedCourse} ) {
   
     if (!response.ok) {
       console.error('Error uploading file:', response.statusText);
-      setAlertType("error");
-      setAlertMessage("Error subiendo archivo");
-      setAlertOpen(true);
-    } else {
-      setAlertType("success");
-      setAlertMessage("Archivo subido existosamente");
-      setAlertOpen(true);
-      window.location.reload();
-    }
+      localStorage.setItem('alertOpen', 'true');
+      localStorage.setItem('alertType', 'error');
+      localStorage.setItem('alertMessage', 'Error subiendo archivo');
+  } else {
+      localStorage.setItem('alertOpen', 'true');
+      localStorage.setItem('alertType', 'success');
+      localStorage.setItem('alertMessage', 'Archivo subido existosamente');
+  }
+    window.location.reload();
   };
 
 
@@ -88,13 +88,18 @@ export default function InputFileUpload( {selectedCourse} ) {
             </Button>
         )}
         <Snackbar
-          open={alertOpen}
-          autoHideDuration={5000}
-          onClose={() => setAlertOpen(false)}
+            open={alertOpen}
+            autoHideDuration={5000}
+            onClose={() => {
+                setAlertOpen(false);
+                localStorage.removeItem('alertOpen');
+                localStorage.removeItem('alertType');
+                localStorage.removeItem('alertMessage');
+            }}
         >
-          <Alert onClose={() => setAlertOpen(false)} severity={alertType} sx={{ width: '100%' }}>
-            {alertMessage}
-          </Alert>
+            <Alert onClose={() => setAlertOpen(false)} severity={alertType} sx={{ width: '100%' }}>
+                {alertMessage}
+            </Alert>
         </Snackbar>
         </div>
   );
