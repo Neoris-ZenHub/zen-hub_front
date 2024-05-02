@@ -26,7 +26,6 @@ const Item = styled(Paper)(({ theme }) => ({
     color: "#FFFFFF",
   }));
 
-
 export default function HomePage() {
 
     const { userName } = useContext(UserInfoContext);

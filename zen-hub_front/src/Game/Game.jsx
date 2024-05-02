@@ -7,7 +7,7 @@ import { ThemeProvider } from '@emotion/react';
 import CSSBaseline from '@mui/material/CssBaseline';
 import '../App.css';
 import ResponsiveAppBar from '../AppBar.jsx';
-
+import { getToken } from '../Functions/Game_Functions.js';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main, // Usa el color principal del tema
@@ -15,9 +15,17 @@ const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
     textAlign: 'center',
     color: "#FFFFFF",
-  }));
+}));
 
-export default function MarketPlace(){
+// eslint-disable-next-line react/prop-types
+function UnityGame({ token }) {
+    return (
+        <iframe src={`/ZG-WebGL/index.html?token=${encodeURIComponent(token)}`} width="1080" height="720" />
+    );
+}
+
+export default function Game(){
+    const token = getToken();
 
     return(
         <ThemeProvider theme={theme}>
@@ -27,12 +35,11 @@ export default function MarketPlace(){
             <Grid container>
                 <Grid item xs={12} md={12}>
                     <Item sx={{ height: '745px', margin: '8px'}}>
-
-                        </Item>
-                    </Grid>
+                        <UnityGame token={token} />
+                    </Item>
                 </Grid>
-            </Box>
+            </Grid>
+        </Box>
         </ThemeProvider>
     );
-
 }

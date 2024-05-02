@@ -1,5 +1,5 @@
 //Manda la Información del SignUp a la API para crear un nuevo usuario
-export const SignUp_Function = async (name, last_name, username, password, email) => {
+export const SignUp_Function = async (name, last_name, username, email, password) => {
     try{
     //URL del Signup
     const SignUpURL = 'http://localhost:4000/users/';
@@ -10,7 +10,7 @@ export const SignUp_Function = async (name, last_name, username, password, email
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name: name, last_name: last_name, username: username, password: password, email: email})
+        body: JSON.stringify({name: name, last_name: last_name, username: username, email: email, password: password})
     });
 
     if (!data.ok) {

@@ -16,8 +16,6 @@ import { useContext } from 'react';
 import { UserInfoContext } from './UserInfoContext';
 
 
-const settings = ['Logout'];
-
 function ResponsiveAppBar() {
   const {userRole} = useContext(UserInfoContext);
 
@@ -156,11 +154,6 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
             </Menu>
           </Box>
         </Toolbar>
