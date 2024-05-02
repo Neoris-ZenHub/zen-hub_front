@@ -26,6 +26,5 @@ export const SignUp_Function = async (name, last_name, username, email, password
 
     } catch (error) {
         console.error("Error en la solicitud fetch: ", error);
-        alert("Error en la solicitud fetch: " + error.message);
     }
 };

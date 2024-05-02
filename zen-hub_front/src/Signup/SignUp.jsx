@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -21,8 +21,20 @@ export default function SignUp( ) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(localStorage.getItem('errorMessage') || '');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage(''); // Limpiar el estado de errorMessage
+        localStorage.removeItem('errorMessage'); // Limpiar el mensaje de error del almacenamiento local
+      }, 5000); // 5000 milisegundos = 5 segundos
+  
+      // Limpiar el temporizador cuando el componente se desmonte
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]); // Ejecutar useEffect cada vez que errorMessage cambie
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,15 +44,22 @@ export default function SignUp( ) {
       setErrorMessage("Favor de llenar todos los campos requeridos")
       return;
     }
-    try{
-      await SignUp_Function(name, lastName, username, email, password);
+    try {
+      const response = await SignUp_Function(name, lastName, username, email, password);
+      
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message);
+      }
+    
       navigate('/paths');
       window.location.reload();
     } catch (error) {
-      setErrorMessage("Error al registrarse:" + error.message);
+        localStorage.setItem('errorMessage', "Este correo ya está en uso");
+      }
+      window.location.reload();
       return;
     }
-  };
 
   return (
     <ThemeProvider theme={theme}>

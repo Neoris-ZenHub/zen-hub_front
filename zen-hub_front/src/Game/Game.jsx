@@ -20,7 +20,7 @@ const Item = styled(Paper)(({ theme }) => ({
 // eslint-disable-next-line react/prop-types
 function UnityGame({ token }) {
     return (
-        <iframe src={`/ZG-WebGL/index.html?token=${encodeURIComponent(token)}`} width="1080" height="720" />
+        <iframe src={`/Zenhub-WebGL/index.html?token=${encodeURIComponent(token)}`} width="1080" height="720" />
     );
 }
 
