@@ -31,7 +31,7 @@ const Item = styled(Paper)(({ theme }) => ({
   }));
 
 
-export default function Pahts(){
+export default function Paths(){
 
     const { userName } = useContext(UserInfoContext);
     const [path, setPath] = useState("");

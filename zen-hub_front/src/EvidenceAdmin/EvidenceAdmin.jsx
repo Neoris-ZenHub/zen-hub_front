@@ -50,10 +50,16 @@ export default function EvidenceAdmin() {
     useEffect(() => {
         const fetchInitialEvidences = async () => {
             try {
-                const response = await fetchEvidences(groupField, orderField, userSearch);
-                 if (response.evidencesUser) {
-                    setEvidences(response.evidencesUser);
-                    setErrorMessage("");
+              const response = await fetchEvidences(groupField, orderField, userSearch);
+              if (response.evidencesUser) {
+                response.evidencesUser.forEach(evidence => {
+                    const bytes = new Uint8Array(evidence.image.data);
+                    const binary = bytes.reduce((acc, byte) => acc + String.fromCharCode(byte), '');
+                    const base64Image = btoa(binary);
+                    evidence.image = base64Image;
+                });
+                setEvidences(response.evidencesUser);
+                setErrorMessage("");
                 } else if (response.message === "User not found") {
                     setErrorMessage("Usuario no encontrado");
                 } else {
@@ -130,6 +136,7 @@ export default function EvidenceAdmin() {
               setAlertType("success");
               setAlertMessage("Evidencia verificada correctamente");
               setAlertOpen(true);
+              setProgress(0);
           } catch (error) {
             console.error('Error al verificar la evidencia:', error);
           }
@@ -158,17 +165,70 @@ export default function EvidenceAdmin() {
           }
 
       if (!evidences.length) {
-        return (
+        return ( 
         <ThemeProvider theme={theme}>
         <CSSBaseline />
         <ResponsiveAppBar />
-          <Grid item xs={9} md={9}>
-            <Item sx={{ height: '825px', margin: '8px'}}>
-              <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-                <div>No evidences to validate</div>
-              </Box>
-            </Item>
-          </Grid>
+        <Box sx={{ flexGrow: 1 }}>
+        <Grid container>
+        <Grid item xs={3} md={3}>
+        <Item sx={{ height: '745px', margin: '8px'}}>
+            <article style = {{display: 'flex', marginTop: '25px', marginLeft: "5px" }}>
+            <Avatar 
+                alt="User Avatar" 
+                src= {`https://unavatar.io/${userName}`} 
+                sx={{ marginLeft: '2%', width: '52px', height: '52px'}}/>
+            <strong style={{marginLeft: '6%', marginTop: '2.5%', fontSize: '25px'}}>{userName}</strong>
+            </article>
+            <div style = {{display: 'flex', justifyContent: 'center', marginTop: '90%', marginRight: '35%' }}>
+            <Box marginTop = {'-100%'}>
+                <strong style={{ fontSize: '22px'}}> Global o por Path:</strong>
+                <Box marginTop = {'5%'}>
+                <SearchableDropdownAdmin 
+                    onPathChange = {handlePathChange}
+                />
+                </Box>
+            </Box>
+            </div>
+            <div style = {{display: 'flex', justifyContent: 'center', marginTop: '-25%' }}>
+            <Box marginRight = {'52.5%'}>
+                <RadioButtonsAdmin 
+                    onRadioChange={handleRadioChange}/>
+            </Box>
+            
+            </div>
+            <Box marginTop = {'20%'} marginRight = {'0%'} marginLeft={'-2%'}>
+                <Box textAlign='left' marginLeft={'6%'}>
+                <strong style={{ fontSize: '22px'}}> Buscar Usuario</strong>
+                </Box>
+                <Box marginTop = {'5%'}>
+                <TextField
+                style = {{width: '90%'}}
+                label="Nombre de Usuario a Buscar"
+                variant="outlined"
+                onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                        setUserSearch(event.target.value);
+                    } 
+                }}
+                />
+                </Box>
+            </Box>
+        </Item>
+        </Grid>
+
+        <Grid item xs={9} md={9}>
+        <Item sx={{ height: '745px', margin: '8px', display: 'flex', flexDirection: 'column'}}>
+            <div style = {{display: 'flex', justifyContent: 'center'}}>
+                <strong style={{ fontSize: '22px', textAlign: 'center', marginTop: "30%"}}>
+                  No hay evidencias para validar
+                </strong>
+
+                </div>
+                </Item>
+            </Grid>
+            </Grid>
+        </Box>
         </ThemeProvider>
         );
       }
